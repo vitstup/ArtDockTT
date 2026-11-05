@@ -15,19 +15,26 @@ public class FirstPersonController : NetworkBehaviour
     private Rigidbody body;
     private bool inputEnabled;
 
+    private Vector2 serverInput;
+    private float serverYaw;
+    private double lastInputTime;
+    private uint inputSequence;
+    private uint lastInputSequence;
+
     public float Pitch { get; private set; }
     public float Yaw { get; private set; }
 
     protected override void OnNetworkPostSpawn()
     {
+        body = GetComponent<NetworkRigidbody>().Rigidbody;
+        serverYaw = body.rotation.eulerAngles.y;
+
         if (!IsOwner || !NetworkObject.IsPlayerObject)
             return;
 
-        SetInputEnabled(true);
-
-        body = GetComponent<NetworkRigidbody>().Rigidbody;
-        Yaw = body.rotation.eulerAngles.y;
+        Yaw = serverYaw;
         Pitch = 0f;
+        SetInputEnabled(true);
     }
 
     public override void OnNetworkDespawn()
@@ -67,15 +74,36 @@ public class FirstPersonController : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (!IsOwner || body.isKinematic)
+        if (!IsSpawned)
             return;
 
-        var input = inputEnabled ? Vector2.ClampMagnitude(moveAction.action.ReadValue<Vector2>(), 1f) : Vector2.zero;
-        var rotation = Quaternion.Euler(0f, Yaw, 0f);
-        var velocity = rotation * new Vector3(input.x, 0f, input.y) * moveSpeed;
+        if (IsOwner)
+        {
+            var input = inputEnabled ? moveAction.action.ReadValue<Vector2>() : Vector2.zero;
+            SubmitInputRpc(input, Yaw, ++inputSequence);
+        }
+
+        if (!IsServer)
+            return;
+
+        var movement = NetworkManager.ServerTime.Time - lastInputTime < 0.5 ? serverInput : Vector2.zero;
+        var rotation = Quaternion.Euler(0f, serverYaw, 0f);
+        var velocity = rotation * new Vector3(movement.x, 0f, movement.y) * moveSpeed;
         velocity.y = body.linearVelocity.y;
 
         body.MoveRotation(rotation);
         body.linearVelocity = velocity;
+    }
+
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner, Delivery = RpcDelivery.Unreliable)]
+    private void SubmitInputRpc(Vector2 input, float yaw, uint sequence)
+    {
+        if (sequence <= lastInputSequence)
+            return;
+
+        lastInputSequence = sequence;
+        lastInputTime = NetworkManager.ServerTime.Time;
+        serverInput = Vector2.ClampMagnitude(input, 1f);
+        serverYaw = yaw;
     }
 }

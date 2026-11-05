@@ -38,7 +38,8 @@ public class FirstPersonCamera : MonoBehaviour
             return;
 
         transform.SetPositionAndRotation(
-            target.transform.position + Vector3.up * heightHeight + target.transform.forward * forwardOffset,
+            target.transform.position + Vector3.up * heightHeight
+                + Quaternion.Euler(0f, target.Yaw, 0f) * Vector3.forward * forwardOffset,
             Quaternion.Euler(target.Pitch, target.Yaw, 0f));
     }
 }

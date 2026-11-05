@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 4505450983508745001}
   - component: {fileID: 4505450983508745002}
   - component: {fileID: 4505450983508745003}
+  - component: {fileID: 8083322462215911706}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -173,7 +174,7 @@ MonoBehaviour:
   RotationMaxInterpolationTime: 0.1
   ScaleLerpSmoothing: 1
   ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 1
+  AuthorityMode: 0
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -266,7 +267,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 717a02054ef2699498e6bd4234fd7995, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Zenject::Zenject.ZenAutoInjecter
   _containerSource: 0
 --- !u!114 &4505450983508745003
@@ -279,8 +280,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b28df03ca174536927e6bbf872639cd, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalPlayerRegistration
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &8083322462215911706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5657339444387386826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f20a0b32577e7548ab6e9f66792b81e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerItemSpawner
+  ShowTopMostFoldoutHeaderGroup: 1
+  spawnAction: {fileID: 269405627911285700, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  itemPrefab: {fileID: 6650570154175784944, guid: 5192394ddfc30a3419b7b1a719fc3a27, type: 3}
+  spawnDistance: 2
+  spawnHeight: 0.7
+  spawnCooldown: 0.25
 --- !u!1 &7296954847341869564
 GameObject:
   m_ObjectHideFlags: 0
