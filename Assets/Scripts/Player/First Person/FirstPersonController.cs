@@ -36,6 +36,8 @@ public class FirstPersonController : NetworkBehaviour
     protected override void OnNetworkPostSpawn()
     {
         body = GetComponent<NetworkRigidbody>().Rigidbody;
+        if (IsServer)
+            body.constraints |= RigidbodyConstraints.FreezeRotation;
         serverYaw = body.rotation.eulerAngles.y;
 
         if (!IsOwner || !NetworkObject.IsPlayerObject)
