@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Zenject;
 
 [RequireComponent(typeof(NetworkRigidbody))]
@@ -14,6 +15,10 @@ public class NetworkItem : NetworkBehaviour
     [Inject] private ItemInteractionHandler interactions;
 
     public bool IsHeld => holderId.Value != NoHolder;
+
+    private void OnEnable() => RenderPipelineManager.beginCameraRendering += UpdateHeldPose;
+
+    private void OnDisable() => RenderPipelineManager.beginCameraRendering -= UpdateHeldPose;
 
     private void Awake()
     {
@@ -75,6 +80,19 @@ public class NetworkItem : NetworkBehaviour
     }
 
     private void OnHolderChanged(ulong previous, ulong current) => ApplyPhysics();
+
+    private void UpdateHeldPose(ScriptableRenderContext context, Camera camera)
+    {
+        if (!IsSpawned || !IsHeld || !IsOwner)
+            return;
+
+        var player = NetworkManager.LocalClient.PlayerObject;
+        if (player == null)
+            return;
+
+        var interaction = player.GetComponent<PlayerItemInteraction>();
+        transform.SetPositionAndRotation(interaction.HoldPosition, interaction.HoldRotation);
+    }
 
     private void ApplyPhysics()
     {

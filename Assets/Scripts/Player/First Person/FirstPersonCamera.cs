@@ -37,6 +37,8 @@ public class FirstPersonCamera : MonoBehaviour
         if (target == null)
             return;
 
+        target.UpdatePrediction();
+
         transform.SetPositionAndRotation(
             target.transform.position + Vector3.up * heightHeight
                 + Quaternion.Euler(0f, target.Yaw, 0f) * Vector3.forward * forwardOffset,
