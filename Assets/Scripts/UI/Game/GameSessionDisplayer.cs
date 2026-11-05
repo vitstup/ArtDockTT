@@ -8,7 +8,7 @@ public class GameSessionDisplayer : MonoBehaviour
     [SerializeField] private GameObject playersPanel;
     [SerializeField] private Button leave;
 
-    [SerializeField] private InputActionReference togglePlayers;
+    [SerializeField] private InputActionReference togglePlayersAction;
 
     [Inject] private NetworkSession session;
 
@@ -16,8 +16,9 @@ public class GameSessionDisplayer : MonoBehaviour
 
     private void OnEnable()
     {
-        var action = togglePlayers.action;
-        action.performed += TogglePlayers;
+        var action = togglePlayersAction.action;
+        action.performed += ToggleView;
+
         enabledTogglePlayers = !action.enabled;
 
         if (enabledTogglePlayers)
@@ -26,8 +27,8 @@ public class GameSessionDisplayer : MonoBehaviour
 
     private void OnDisable()
     {
-        var action = togglePlayers.action;
-        action.performed -= TogglePlayers;
+        var action = togglePlayersAction.action;
+        action.performed -= ToggleView;
 
         if (enabledTogglePlayers)
             action.Disable();
@@ -39,9 +40,10 @@ public class GameSessionDisplayer : MonoBehaviour
         leave.onClick.AddListener(session.Leave);
     }
 
-    private void TogglePlayers(InputAction.CallbackContext context)
+    private void ToggleView(InputAction.CallbackContext context)
     {
-        playersPanel.SetActive(!playersPanel.activeSelf);
+        var showPlayers = !playersPanel.activeSelf;
+        playersPanel.SetActive(showPlayers);
     }
 
     private void OnDestroy()

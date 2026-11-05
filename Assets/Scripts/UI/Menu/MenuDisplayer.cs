@@ -40,6 +40,9 @@ public class MenuDisplayer : MonoBehaviour
         leave.onClick.AddListener(session.Leave);
 
         Refresh();
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     private void OnDestroy()
