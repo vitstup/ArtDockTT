@@ -43,7 +43,8 @@ public class NetworkSceneController : IInitializable, ITickable, IDisposable
 
     void ITickable.Tick()
     {
-        if (!IsReturningToMenu || manager.ShutdownInProgress || (localSceneLoad != null && !localSceneLoad.isDone))
+        if (!IsReturningToMenu || manager == null || manager.ShutdownInProgress
+            || (localSceneLoad != null && !localSceneLoad.isDone))
             return;
 
         IsReturningToMenu = false;

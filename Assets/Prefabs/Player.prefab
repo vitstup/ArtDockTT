@@ -17,10 +17,11 @@ GameObject:
   - component: {fileID: 7646274630415676955}
   - component: {fileID: 2554139409677792516}
   - component: {fileID: 4505450983508745001}
-  - component: {fileID: 4505450983508745002}
   - component: {fileID: 4505450983508745003}
   - component: {fileID: 8083322462215911706}
   - component: {fileID: 584519962195980330}
+  - component: {fileID: 130574517478049710}
+  - component: {fileID: 7700966470701104903}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -258,19 +259,6 @@ MonoBehaviour:
   lookAction: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   moveSpeed: 5
   mouseSensitivity: 0.12
---- !u!114 &4505450983508745002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5657339444387386826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717a02054ef2699498e6bd4234fd7995, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Zenject::Zenject.ZenAutoInjecter
-  _containerSource: 0
 --- !u!114 &4505450983508745003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,6 +308,34 @@ MonoBehaviour:
   holdDistance: 1.5
   throwSpeed: 8
   viewOffset: {x: 0, y: 0.7, z: 0.7}
+--- !u!114 &130574517478049710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5657339444387386826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ba8919dbdd0ec849a0fe31c5708c58b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerColorSwitcher
+  ShowTopMostFoldoutHeaderGroup: 1
+  changeColorAction: {fileID: 2483714125705257536, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  color1: {r: 1, g: 1, b: 1, a: 1}
+  color2: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &7700966470701104903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5657339444387386826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ca7b5cbf6021743acfebe2384ddeb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSceneInjector
 --- !u!1 &7296954847341869564
 GameObject:
   m_ObjectHideFlags: 0

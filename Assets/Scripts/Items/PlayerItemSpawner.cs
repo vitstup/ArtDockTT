@@ -44,8 +44,8 @@ public class PlayerItemSpawner : NetworkBehaviour
         nextSpawnTime = now + spawnCooldown;
 
         var position = transform.position + transform.forward * spawnDistance + Vector3.up * spawnHeight;
-        var item = container.InstantiatePrefabForComponent<NetworkObject>(
-            itemPrefab, position, Quaternion.identity, null);
+        var item = Instantiate(itemPrefab, position, Quaternion.identity);
+        container.InjectGameObject(item.gameObject);
         item.Spawn(destroyWithScene: true);
     }
 }
