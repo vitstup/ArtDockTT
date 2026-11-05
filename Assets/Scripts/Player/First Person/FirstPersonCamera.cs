@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 [RequireComponent(typeof(Camera))]
 public class FirstPersonCamera : MonoBehaviour
@@ -7,15 +8,17 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] private float forwardOffset = 0.7f;
 
     private FirstPersonController target;
+    [Inject] private ILocalPlayerProvider playerProvider;
 
     private void OnEnable()
     {
-        FirstPersonController.LocalPlayerChanged += SetTarget;
+        playerProvider.Changed += SetTarget;
+        SetTarget(playerProvider.Current);
     }
 
     private void OnDisable()
     {
-        FirstPersonController.LocalPlayerChanged -= SetTarget;
+        playerProvider.Changed -= SetTarget;
         SetTarget(null);
     }
 
@@ -25,6 +28,8 @@ public class FirstPersonCamera : MonoBehaviour
             target.SetInputEnabled(false);
 
         target = player;
+        if (target != null)
+            target.SetInputEnabled(true);
     }
 
     private void LateUpdate()

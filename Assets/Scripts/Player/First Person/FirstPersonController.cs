@@ -1,4 +1,3 @@
-using System;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -16,8 +15,6 @@ public class FirstPersonController : NetworkBehaviour
     private Rigidbody body;
     private bool inputEnabled;
 
-    public static event Action<FirstPersonController> LocalPlayerChanged;
-
     public float Pitch { get; private set; }
     public float Yaw { get; private set; }
 
@@ -31,8 +28,6 @@ public class FirstPersonController : NetworkBehaviour
         body = GetComponent<NetworkRigidbody>().Rigidbody;
         Yaw = body.rotation.eulerAngles.y;
         Pitch = 0f;
-
-        LocalPlayerChanged?.Invoke(this);
     }
 
     public override void OnNetworkDespawn()
@@ -40,8 +35,6 @@ public class FirstPersonController : NetworkBehaviour
         if (!IsOwner) return;
 
         SetInputEnabled(false);
-
-        LocalPlayerChanged?.Invoke(null);
     }
 
     public void SetInputEnabled(bool value)
