@@ -17,12 +17,14 @@ public class FirstPersonController : NetworkBehaviour
 
     private Vector2 serverInput;
     private float serverYaw;
+    private float serverPitch;
     private double lastInputTime;
     private uint inputSequence;
     private uint lastInputSequence;
 
     public float Pitch { get; private set; }
     public float Yaw { get; private set; }
+    public Quaternion ViewRotation => Quaternion.Euler(IsOwner ? Pitch : serverPitch, IsOwner ? Yaw : serverYaw, 0f);
 
     protected override void OnNetworkPostSpawn()
     {
@@ -80,7 +82,7 @@ public class FirstPersonController : NetworkBehaviour
         if (IsOwner)
         {
             var input = inputEnabled ? moveAction.action.ReadValue<Vector2>() : Vector2.zero;
-            SubmitInputRpc(input, Yaw, ++inputSequence);
+            SubmitInputRpc(input, Yaw, Pitch, ++inputSequence);
         }
 
         if (!IsServer)
@@ -96,7 +98,7 @@ public class FirstPersonController : NetworkBehaviour
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner, Delivery = RpcDelivery.Unreliable)]
-    private void SubmitInputRpc(Vector2 input, float yaw, uint sequence)
+    private void SubmitInputRpc(Vector2 input, float yaw, float pitch, uint sequence)
     {
         if (sequence <= lastInputSequence)
             return;
@@ -105,5 +107,6 @@ public class FirstPersonController : NetworkBehaviour
         lastInputTime = NetworkManager.ServerTime.Time;
         serverInput = Vector2.ClampMagnitude(input, 1f);
         serverYaw = yaw;
+        serverPitch = Mathf.Clamp(pitch, -89f, 89f);
     }
 }

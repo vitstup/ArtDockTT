@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
 public class PlayerItemSpawner : NetworkBehaviour
 {
@@ -13,6 +14,7 @@ public class PlayerItemSpawner : NetworkBehaviour
     [SerializeField, Min(0f)] private float spawnCooldown = 0.25f;
 
     private double nextSpawnTime;
+    [Inject] private DiContainer container;
 
     public override void OnNetworkSpawn()
     {
@@ -42,7 +44,8 @@ public class PlayerItemSpawner : NetworkBehaviour
         nextSpawnTime = now + spawnCooldown;
 
         var position = transform.position + transform.forward * spawnDistance + Vector3.up * spawnHeight;
-        var item = Instantiate(itemPrefab, position, Quaternion.identity);
+        var item = container.InstantiatePrefabForComponent<NetworkObject>(
+            itemPrefab, position, Quaternion.identity, null);
         item.Spawn(destroyWithScene: true);
     }
 }
